@@ -40,6 +40,18 @@ function correctName(modName) {
         case "Life In Arena":
             return "Life In Arena | Жизнь на Арене"
             break
+        case "Realm of Chaos v1.3.2":
+        case "Realm of Chaos v1.3.3":
+        case "Realm of Chaos v1.3.5":
+        case "Realm of Chaos v1.3.6":
+            return "Realm of Chaos"
+            break
+        case "Guarding Athena BetaV1.1.3":
+        case "Guarding Athena BetaV1.1.5":
+        case "Guarding Athena BetaV1.1.6":
+        case "Guarding Athena BetaV1.1.7":
+        case "Guarding Athena BetaV1.1.8":
+            return "Guarding Athena Beta"
         default:
             return modName
     }
