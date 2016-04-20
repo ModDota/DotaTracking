@@ -44,6 +44,18 @@ function correctName(modName) {
         case "Realm of Chaos v1.3.3":
         case "Realm of Chaos v1.3.5":
         case "Realm of Chaos v1.3.6":
+        case "Realm of Chaos v1.3.8":
+        case "Realm of Chaos v1.4.0":
+        case "Realm of Chaos v1.4.2":
+        case "Realm of Chaos v1.4.3":
+        case "Realm of Chaos v1.4.5":
+        case "Realm of Chaos v1.4.8":
+        case "Realm of Chaos v1.5.7":
+        case "Realm of Chaos v1.6.2":
+        case "Realm of Chaos v1.6.5":
+        case "Realm of Chaos v1.6.7":
+        case "Realm of Chaos v1.6.8":
+        case "Realm of Chaos v1.7.0":
             return "Realm of Chaos"
             break
         case "Guarding Athena BetaV1.1.3":
@@ -51,6 +63,7 @@ function correctName(modName) {
         case "Guarding Athena BetaV1.1.6":
         case "Guarding Athena BetaV1.1.7":
         case "Guarding Athena BetaV1.1.8":
+        case "Guarding Athena BetaV1.1.9":
             return "Guarding Athena Beta"
         default:
             return modName
@@ -69,6 +82,8 @@ function renderEntry(modName) {
     msg += "(best position: <span class='position'>" +(modEntry.maxPosition+1)+ "</span>) ";
     
     msg += "(best streak: <span class='streak'>" +modEntry.maxStreak + "</span>)";
+    
+    msg += "((current streak: <span class='streak'>" + modEntry.currentStreak + "</span>))";
     if (modEntry["current"]) {
         msg += "</div>"
     }
@@ -124,7 +139,7 @@ d3.json("Data/DotaTracking.json", function (error, data) {
                 }
             }
         });
-        streakInfo = top10Entry; //Override old streakInfo with "last iterations" data.
+        streakInfo = correctNames(top10Entry); //Override old streakInfo with "last iterations" data.
     }
     data["top10"][top10Dates[top10Dates.length-1]].forEach(function(modName, position) {
        topInfo[correctName(modName)]["current"] = true; 
@@ -280,7 +295,7 @@ d3.json("Data/DotaTracking.json", function (error, data) {
         .data(Object.keys(data["gotd"]).sort(function(a,b) {
             a = parseDate.parse(a);
             b = parseDate.parse(b);
-            return a.getTime() - b.getTime();
+            return b.getTime() - a.getTime();
         })).enter()
         .append("tr");
     
