@@ -1,4 +1,3 @@
-import * as util from 'util';
 import * as fs from "fs";
 import * as child_process from "child_process";
 
@@ -49,7 +48,7 @@ async function gitInit() {
     }
     await git.clone({
         ...repo,
-        url: "https://github.com/SinZ163/TestTracking",
+        url: "https://github.com/ModDota/API",
         ref: "master"
     });
     await git.pull({

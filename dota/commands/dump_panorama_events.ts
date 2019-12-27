@@ -27,7 +27,7 @@ export default class DumpPanoramaEvents implements Handler {
                 args,
             }
         }
-        writeFileSync(staging + "__data/events.json", JSON.stringify(result, undefined, 4));
+        writeFileSync(staging + "_data/events.json", JSON.stringify(result, undefined, 4));
         console.log("dumped Events");
     }
 }

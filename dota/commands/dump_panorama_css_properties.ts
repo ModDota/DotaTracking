@@ -43,7 +43,7 @@ export default class DumpPanoramaCSSProperties implements Handler {
                 examples,
             }
         }
-        writeFileSync(staging + "__data/css_properties.json", JSON.stringify(result, undefined, 4));
+        writeFileSync(staging + "_data/css_properties.json", JSON.stringify(result, undefined, 4));
         console.log("dumped CSS Properties");
     }
 }

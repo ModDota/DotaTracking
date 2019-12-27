@@ -86,10 +86,10 @@ export default class DotaExtension implements GameExtension {
         });
     }
     async postProcess(staging: string) {
-        fs.copyFileSync(`${process.env.DOTA_PATH}/game/dota/scripts/vscripts/lua_client.json`, staging + "__data/lua_client.json");
-        fs.copyFileSync(`${process.env.DOTA_PATH}/game/dota/scripts/vscripts/lua_client_enums.json`, staging + "__data/lua_client_enums.json");
-        fs.copyFileSync(`${process.env.DOTA_PATH}/game/dota/scripts/vscripts/lua_server.json`, staging + "__data/lua_server.json");
-        fs.copyFileSync(`${process.env.DOTA_PATH}/game/dota/scripts/vscripts/lua_server_enums.json`, staging + "__data/lua_server_enums.json");
+        fs.copyFileSync(`${process.env.DOTA_PATH}/game/dota/scripts/vscripts/lua_client.json`, staging + "_data/lua_client.json");
+        fs.copyFileSync(`${process.env.DOTA_PATH}/game/dota/scripts/vscripts/lua_client_enums.json`, staging + "_data/lua_client_enums.json");
+        fs.copyFileSync(`${process.env.DOTA_PATH}/game/dota/scripts/vscripts/lua_server.json`, staging + "_data/lua_server.json");
+        fs.copyFileSync(`${process.env.DOTA_PATH}/game/dota/scripts/vscripts/lua_server_enums.json`, staging + "_data/lua_server_enums.json");
 
         const consoleOut = fs.readFileSync(`${process.env.DOTA_PATH}/game/dota_dump/console.log`, {encoding: "utf8"});
         console.log(commands);
@@ -99,10 +99,10 @@ export default class DotaExtension implements GameExtension {
 
         // Lua's json writer is shit, lets format it again
         sortJson.overwrite([
-            staging + "__data/lua_client.json",
-            staging + "__data/lua_client_enums.json",
-            staging + "__data/lua_server.json",
-            staging + "__data/lua_server_enums.json",
+            staging + "_data/lua_client.json",
+            staging + "_data/lua_client_enums.json",
+            staging + "_data/lua_server.json",
+            staging + "_data/lua_server_enums.json",
         ], {
             indentSize: 4,
         });
