@@ -75,6 +75,9 @@ export default class DotaExtension implements GameExtension {
     }
     run() {
         return new Promise<void>((resolve, reject) => {
+            child_process.spawn(`${process.env.DOTA_PATH}/game/bin/win64/vconsole2.exe`, [], {
+                detached: true,
+            });
             // TODO: Add "-nowindow" back, // "-hushsteam"
             const childProcess = child_process.spawn(`${process.env.DOTA_PATH}/game/bin/win64/dota2.exe`, ["-dev", "-vconsole", "-language dump", "-consolelog"]);
             // childProcess.stdout.on("data", data => console.log(`[Dota2] [OUT] ${data}`));
@@ -86,10 +89,10 @@ export default class DotaExtension implements GameExtension {
         });
     }
     async postProcess(staging: string) {
-        fs.copyFileSync(`${process.env.DOTA_PATH}/game/dota/scripts/vscripts/lua_client.json`, staging + "_data/lua_client.json");
-        fs.copyFileSync(`${process.env.DOTA_PATH}/game/dota/scripts/vscripts/lua_client_enums.json`, staging + "_data/lua_client_enums.json");
-        fs.copyFileSync(`${process.env.DOTA_PATH}/game/dota/scripts/vscripts/lua_server.json`, staging + "_data/lua_server.json");
-        fs.copyFileSync(`${process.env.DOTA_PATH}/game/dota/scripts/vscripts/lua_server_enums.json`, staging + "_data/lua_server_enums.json");
+        fs.copyFileSync(`${process.env.DOTA_PATH}/game/dota_addons/dump_gamemode/scripts/vscripts/lua_client.json`, staging + "_data/lua_client.json");
+        fs.copyFileSync(`${process.env.DOTA_PATH}/game/dota_addons/dump_gamemode/scripts/vscripts/lua_client_enums.json`, staging + "_data/lua_client_enums.json");
+        fs.copyFileSync(`${process.env.DOTA_PATH}/game/dota_addons/dump_gamemode/scripts/vscripts/lua_server.json`, staging + "_data/lua_server.json");
+        fs.copyFileSync(`${process.env.DOTA_PATH}/game/dota_addons/dump_gamemode/scripts/vscripts/lua_server_enums.json`, staging + "_data/lua_server_enums.json");
 
         const consoleOut = fs.readFileSync(`${process.env.DOTA_PATH}/game/dota_dump/console.log`, {encoding: "utf8"});
         console.log(commands);

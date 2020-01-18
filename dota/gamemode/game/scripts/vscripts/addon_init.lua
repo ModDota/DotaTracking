@@ -181,6 +181,7 @@ local function writeToDisk(filename, data)
     }
     file:write(json.encode(data, options))
     io.close(file)
+    print("Wrote to disk for: " .. filename)
 end
 
 local function getTime()
