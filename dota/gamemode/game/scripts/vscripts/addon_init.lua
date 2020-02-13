@@ -241,6 +241,9 @@ else
             SendToConsole("echoln [ModDota] Start Events")
             SendToConsole("dump_panorama_events")
             SendToConsole("echoln [ModDota] End Events")
+            SendToConsole("echoln [ModDota] Start Modifiers")
+            SendToConsole("dump_modifier_list")
+            SendToConsole("echoln [ModDota] End Modifiers")
             SendToConsole("script_reload")
         end)
     end
