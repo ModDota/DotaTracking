@@ -16,11 +16,21 @@ function getConsoleInfo(consoleOut: string, start: string, stop: string) {
 export default class DotaExtension implements GameExtension {
     app = express();
     constructor() {
-        this.app.use(express.json());
+        this.app.use(express.json({limit: '50mb'}));
+        this.app.use(express.urlencoded({limit: '50mb'}));
 
         this.app.post(["/client", "/server"], (req, res) => {
             console.log(req.path, req.body);
             res.sendStatus(200);
+        });
+
+        this.app.post("/disk/:filepath", async (req, res) => {
+            console.log(`Requested disk write for ${req.params.filepath}`);
+            if (req.params.filepath) {
+                await fs.promises.writeFile(`${process.env.DOTA_PATH}/game/dota_addons/dump_gamemode/scripts/vscripts/${req.params.filepath}`, JSON.stringify(req.body));
+                return res.sendStatus(200);
+            }
+            return res.sendStatus(400);
         });
 
         this.app.get("/delay", async (req, res) => {
@@ -29,12 +39,6 @@ export default class DotaExtension implements GameExtension {
             res.status(200).json({});
         });
         this.app.listen(8888, () => console.log(`DotaTracking internal server now running on port 8888!`))
-        fs.watchFile(`${process.env.DOTA_PATH}/game/dota/scripts/vscripts/client.json`, (curr, prev) => {
-            console.log("CLIENT updated dump");
-        });
-        fs.watchFile(`${process.env.DOTA_PATH}/game/dota/scripts/vscripts/server.json`, (curr, prev) => {
-            console.log("SERVER updated dump");
-        });
     }
     appid = 570;
     checkVersion() : Promise<{oldVersion: string, newVersion: string}> {
@@ -79,7 +83,7 @@ export default class DotaExtension implements GameExtension {
                 detached: true,
             });
             // TODO: Add "-nowindow" back, // "-hushsteam"
-            const childProcess = child_process.spawn(`${process.env.DOTA_PATH}/game/bin/win64/dota2.exe`, ["-dev", "-vconsole", "-language dump", "-consolelog"]);
+            const childProcess = child_process.spawn(`${process.env.DOTA_PATH}/game/bin/win64/dota2.exe`, ["-dev", "-vconsole", "-language dump", "-consolelog", "-novid"]);
             // childProcess.stdout.on("data", data => console.log(`[Dota2] [OUT] ${data}`));
             // childProcess.stderr.on("data", data => console.error(`[Dota2] [ERR] ${data}`));
             childProcess.on("exit", (code, signal) => {

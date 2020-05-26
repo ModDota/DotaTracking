@@ -174,14 +174,48 @@ local function dumpScriptBindings()
     return bindings, enums
 end
 
+filesPending = {}
+
 local function writeToDisk(filename, data)
-    local file, err = io.open(filename, "w")
+    filesPending[filename] = true
+    local req = CreateHTTPRequestScriptVM('POST', "http://localhost:8888/disk/" .. filename);
     local options = {
         ["indent"] = true
     }
-    file:write(json.encode(data, options))
-    io.close(file)
+    req:SetHTTPRequestRawPostBody('application/json', json.encode(data, options))
+    req:Send(function (res)
+        PrintTable(res)
+        print(filename .. " | " .. res.StatusCode)
+        PrintTable(res.Body)
+        filesPending[filename] = false
+        checkIfFinished()
+    end)
     print("Wrote to disk for: " .. filename)
+end
+
+function checkIfFinished()
+    print("checking if finished")
+    PrintTable(filesPending)
+    local i = 0
+    for k, v in pairs(filesPending) do
+        i = i + 1
+        if v == true then
+            print(k .. " hasn't finished, aborting")
+            return
+        end
+    end
+    if i ~= 2 then
+        print("We don't have 2 requests? | " .. i)
+        return
+    end
+    print("We are finished")
+    if IsServer() then
+        print("[Server] Done!");        
+        SendToServerConsole("cl_script_reload");
+    else
+        print("[Client] Done!");
+        SendToConsole("quit");
+    end
 end
 
 local function getTime()
@@ -196,8 +230,6 @@ if IsServer() == false then
     print(Time())
     PrintTable(LocalTime())
 end
-local src = debug.getinfo(1).source
-basepath = string.sub(src, 2, -1 - string.len("addon_init.lua"))
 if Convars:GetBool("moddota_dump_init") then
     print("We are inside the convar", IsServer())
     -- These calls define globals
@@ -206,25 +238,16 @@ if Convars:GetBool("moddota_dump_init") then
 
 
     if IsServer() then
-        filename = basepath .. "lua_server.json"
-        filename_enums = basepath .. "lua_server_enums.json"
+        filename = "lua_server.json"
+        filename_enums = "lua_server_enums.json"
     else
-        filename = basepath .. "lua_client.json"
-        filename_enums = basepath .. "lua_client_enums.json"
+        filename = "lua_client.json"
+        filename_enums = "lua_client_enums.json"
     end
 
     local bindings, enums = dumpScriptBindings()
     writeToDisk(filename, bindings)
     writeToDisk(filename_enums, enums)
-
-
-    if IsServer() then
-        print("[Server] Done!");        
-        SendToServerConsole("cl_script_reload");
-    else
-        print("[Client] Done!");
-        SendToConsole("quit");
-    end
 else
     if IsServer() ~= true then
         Convars:RegisterConvar("moddota_dump_init", "", "Have we done a lap yet", FCVAR_PROTECTED);
