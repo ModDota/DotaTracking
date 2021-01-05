@@ -83,3 +83,6 @@ typings/
 
 version.txt
 staging/
+steamcmd/
+private/
+bin/vrf
