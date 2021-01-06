@@ -117,7 +117,6 @@ export async function main(instance: GameExtension) {
             if (process.env.USE_DOTA === "true") {
                 await instance.clean();
             }
-            successIterations++;
             if (process.env.USE_GIT === "true") {
                 await gitStuff(`${newVersion}`);
             }
@@ -127,6 +126,7 @@ export async function main(instance: GameExtension) {
             }
             await sleep(1000 * 60 * 2);
         }
+        successIterations++;
     }
 }
 if (require.main === module) {
