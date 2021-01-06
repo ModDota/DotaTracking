@@ -98,7 +98,7 @@ export default class DotaExtension implements GameExtension {
         fs.copyFileSync(`${process.env.DOTA_PATH}/game/dota_addons/dump_gamemode/scripts/vscripts/lua_server.json`, staging + "_data/lua_server.json");
         fs.copyFileSync(`${process.env.DOTA_PATH}/game/dota_addons/dump_gamemode/scripts/vscripts/lua_server_enums.json`, staging + "_data/lua_server_enums.json");
 
-        const consoleOut = fs.readFileSync(`${process.env.DOTA_PATH}/game/dota_dump/console.log`, {encoding: "utf8"});
+        const consoleOut = fs.readFileSync(`${process.env.DOTA_PATH}/game/dota/console.log`, {encoding: "utf8"});
         console.log(commands);
         for (const handler of commands) {
             handler.handle(staging, getConsoleInfo(consoleOut, handler.startString, handler.endString));
