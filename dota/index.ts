@@ -54,11 +54,7 @@ export default class DotaExtension implements GameExtension {
                     const info = data.toString();
                     const newVersion = /ClientVersion=([0-9\.]*)/.exec(info)[1];
                     console.log(oldVersion, newVersion);
-                    fs.writeFile(__dirname + "/../version.txt", newVersion, {}, err => {
-                        if (err) {
-                            console.error("Write Version", err);
-                        }
-                    });
+                    fs.writeFileSync(__dirname + "/../version.txt", newVersion, {});
                     resolve({
                         oldVersion,
                         newVersion,
