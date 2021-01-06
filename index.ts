@@ -120,9 +120,12 @@ export async function main(instance: GameExtension) {
             if (process.env.USE_GIT === "true") {
                 await gitStuff(`${newVersion}`);
             }
+        } else {
+            if (process.env.USE_LOOP === "false") {
+                process.exit(0);
+            }
+            await sleep(1000 * 60 * 2);
         }
-        // return;
-        await sleep(1000 * 60 * 2);
     }
 }
 if (require.main === module) {
