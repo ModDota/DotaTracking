@@ -85,6 +85,7 @@ export interface GameExtension {
 }
 
 export async function main(instance: GameExtension) {
+    let successIterations = 0;
     while(true) {
         let oldVersion = "0000";
         let newVersion = "1234"
@@ -116,12 +117,12 @@ export async function main(instance: GameExtension) {
             if (process.env.USE_DOTA === "true") {
                 await instance.clean();
             }
-
+            successIterations++;
             if (process.env.USE_GIT === "true") {
                 await gitStuff(`${newVersion}`);
             }
         } else {
-            if (process.env.USE_LOOP === "false") {
+            if (successIterations > 0 && process.env.USE_LOOP === "false") {
                 process.exit(0);
             }
             await sleep(1000 * 60 * 2);

@@ -43,7 +43,7 @@ export default class DotaExtension implements GameExtension {
     appid = 570;
     checkVersion() : Promise<{oldVersion: string, newVersion: string}> {
         return new Promise((resolve, reject) => {
-            fs.readFile("./version.txt", (err, data) => {
+            fs.readFile(__dirname + "/../version.txt", (err, data) => {
                 let oldVersion: string;
                 if (err) {
                     oldVersion = "0000";
@@ -54,7 +54,7 @@ export default class DotaExtension implements GameExtension {
                     const info = data.toString();
                     const newVersion = /ClientVersion=([0-9\.]*)/.exec(info)[1];
                     console.log(oldVersion, newVersion);
-                    fs.writeFile("./version.txt", newVersion, {}, err => {
+                    fs.writeFile(__dirname + "/../version.txt", newVersion, {}, err => {
                         if (err) {
                             console.error("Write Version", err);
                         }
